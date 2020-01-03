@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/hiking_db');
 
 var db = mongoose.connection;
 
@@ -19,14 +18,16 @@ var userSchema = mongoose.Schema({
   salt: String,
   type: String,
 });
+
 var User = mongoose.model('User', userSchema);
 
 var eventSchema = mongoose.Schema({
-  description: String,
+  des: String,
   date: Date,
+  nb: Number,
   participants: [String],
   organizerId: String,
-  type: String,
+  placeDep: String
 });
 
 var Event = mongoose.model('Event', eventSchema);
@@ -42,6 +43,7 @@ var Event = mongoose.model('Event', eventSchema);
 // };
 
 var addUser = function (user, callback) {
+  console.log('before user')
   User.create(user, function (err, user) {
     if (err) {
       callback(err, null);
@@ -50,6 +52,17 @@ var addUser = function (user, callback) {
     }
   });
 };
+
+var getUser = function (username, callback) {
+  User.findOne({ username: username }, function (err, user) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, user);
+    }
+  });
+};
+
 
 var addEvent = function (event, callback) {
   Event.create(event, function (err, event) {
@@ -60,6 +73,8 @@ var addEvent = function (event, callback) {
     }
   });
 };
+
+
 
 var getEventsByOrganizer = function (organizerId, callback) {
   Event.find({ organizerId: organizerId }, function (err, event) {
@@ -81,6 +96,23 @@ var getEventsByUser = function (userId, callback) {
   });
 };
 
+const crypto = require('crypto');
+
+module.exports.createHash = (data, salt = '') => {
+  let shasum = crypto.createHash('sha256');
+  shasum.update(data + salt);
+  return shasum.digest('hex');
+};
+
+module.exports.compareHash = (attempted, stored, salt) => {
+
+  return stored === this.createHash(attempted, salt);
+};
+
+module.exports.createRandom32String = () => {
+  return crypto.randomBytes(32).toString('hex');
+};
+module.exports.getUser = getUser;
 module.exports.addUser = addUser;
 module.exports.addEvent = addEvent;
 module.exports.getEventsByOrganizer = getEventsByOrganizer;
