@@ -1,21 +1,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-// UNCOMMENT THE DATABASE YOU'D LIKE TO USE
-// var items = require('../database-mysql');
-// var items = require('../database-mongo');
 
+
+var db = require('../database-mongo');
+var Hash = require('./utils');
 var app = express();
+app.use(express.static(__dirname + '/../react-client/dist'));
 
-// UNCOMMENT FOR REACT
-// app.use(express.static(__dirname + '/../react-client/dist'));
-
-// UNCOMMENT FOR ANGULAR
-// app.use(express.static(__dirname + '/../angular-client'));
-// app.use(express.static(__dirname + '/../node_modules'));
-
-app.get('/items', function (req, res) {
-  items.selectAll(function(err, data) {
-    if(err) {
+app.post('/user', function (req, res) {
+  db.addUser(req, function (err, data) {//change req by req.body...
+    if (err) {
       res.sendStatus(500);
     } else {
       res.json(data);
@@ -23,7 +17,37 @@ app.get('/items', function (req, res) {
   });
 });
 
-app.listen(3000, function() {
-  console.log('listening on port 3000!');
+app.post('/event', function (req, res) {
+  db.addEvent(req, function (err, data) {//change req by req.body...
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+app.get('/eventsByO', function (req, res) {
+  db.getEventsByOrganizer(req, function (err, data) {//change req by req.body...
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+app.get('/eventsByUser', function (req, res) {
+  db.getEventsByUser(req, function (err, data) {//change req by req.body...
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+app.listen(3333, function () {
+  console.log('listening on port 3333!');
 });
 
