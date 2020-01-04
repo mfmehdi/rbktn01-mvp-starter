@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 
 app.post('/user', function (req, res) {
-  console.log('before create')
+
   var salt = db.createRandom32String();// add salt to req ok
   var hash = db.createHash(req.body.password, salt)// change password ok
   req.body.password = hash
@@ -29,22 +29,17 @@ app.post('/user', function (req, res) {
   });
 });
 
-app.post('/login', function (req, res) {
-  //req contain password , username
-  //console.log(req)
-  db.getUser(req.body.username, function (err, user) {
-    // console.log('password  ', req.body.password, 'salt ', user.salt)
-    // console.log(db.compareHash(req.body.password, user.password, user.salt))
-
-    if (db.compareHash(req.body.password, user.password, user.salt)) {
-      console.log('ok')
-      res.send(user.id)//modify...
+app.get('/login', function (req, res) {
+  db.getUser(req.query.username, function (err, user) {
+    if (db.compareHash(req.query.password, user.password, user.salt)) {
+      res.send(user)//modify...
     }
   })
 
 })
+
 app.post('/event', function (req, res) {
-  console.log(req.body)
+
   db.addEvent(req.body, function (err, data) {//change req by req.body...
     if (err) {
       res.sendStatus(500);
@@ -54,12 +49,27 @@ app.post('/event', function (req, res) {
   });
 });
 
-app.get('/eventsByO', function (req, res) {
-  db.getEventsByOrganizer(req, function (err, data) {//change req by req.body...
+app.get('/events', function (req, res) {//get
+
+  db.getEvents(function (err, data) {//change req by req.body...
     if (err) {
       res.sendStatus(500);
     } else {
       res.json(data);
+    }
+  });
+});
+
+app.get('/eventsByO', function (req, res) {//get
+
+  db.getEventsByOrganizer(req.query.id, function (err, data) {//change req by req.body...
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      console.log(data)
+      res.json(data);
+      res.end()
+
     }
   });
 });
@@ -74,6 +84,17 @@ app.get('/eventsByUser', function (req, res) {
   });
 });
 
+
+app.put('/addUserEvent', function (req, res) {
+
+  db.addUserToEvent(req.body.idEvent, req.body.user, function (err, data) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
 
 app.listen(3333, function () {

@@ -44,7 +44,7 @@ class CreateEvent extends React.Component {
   }
   submitForm(evt) {
     event.preventDefault();
-    console.log('post')
+
     const config = {
       headers: {
         "Content-Type": "application/json"
@@ -63,10 +63,11 @@ class CreateEvent extends React.Component {
         },
         config)
       .then(response => {
-        console.log(response.data)
+        this.props.refre()
+        // console.log(response)
         if (response.data) {
-          console.log(true)
-          // this.props.history.push('/signin')
+          console.log(this.props)
+
         }
       });
 
@@ -84,19 +85,16 @@ class CreateEvent extends React.Component {
     console.log(e.target.value)
   };
   render() {
-    const dateToFormat = '1976-04-19T12:59-0500';
+    //  const dateToFormat = '1976-04-19T12:59-0500';
     return (
       <div className='sign'>
         <form onSubmit={(e) => this.submitForm(e)}>
 
           <label >Place of Departure </label>
-          <input type="text" id="username" name="username" placeholder="Your Username.." value={this.state.placeDep} onChange={(e) => this.handleChangePdep(e)} />
-
-          <label >Date</label>
-          <input type="password" id="password" name="password" placeholder="Your password.." value={this.state.date} onChange={(e) => this.handleChangeDate1(e)} />
+          <input type="text" id="p" name="p" placeholder="Place of Departure" value={this.state.placeDep} onChange={(e) => this.handleChangePdep(e)} />
 
           <label >Number of Place</label>
-          <input type="password" id="password" name="password" placeholder="Your password.." value={this.state.nb} onChange={(e) => this.handleChangeNbPlace(e)} />
+          <input type="number" id="nb" name="nb" placeholder="Number of Place" value={this.state.nb} onChange={(e) => this.handleChangeNbPlace(e)} />
 
           <label >Description</label>
           <input type="text" id="des" name="des" placeholder="Description" value={this.state.des} onChange={(e) => this.handleChangeDes(e)} />

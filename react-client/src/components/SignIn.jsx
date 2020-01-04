@@ -34,10 +34,12 @@ class SignIn extends React.Component {
       }
     }
     axios
-      .post("http://localhost:3333/login",
+      .get("http://localhost:3333/login",
         {
-          username: this.state.username,
-          password: this.state.password,
+          params: {
+            username: this.state.username,
+            password: this.state.password
+          }
         },
         config)
       .then(response => {
@@ -45,8 +47,14 @@ class SignIn extends React.Component {
         console.log(response.data)
         if (response.data) {
           console.log(response.data)
-          localStorage.setItem('idUser', response.data);
-          // this.props.history.push('/HomeUser')
+          localStorage.setItem('idUser', response.data._id);
+          localStorage.setItem('username', response.data.username);
+          if (response.data.type !== 'Organizer') {
+            this.props.history.push('/HomeUser')
+          }
+          else {
+            this.props.history.push('/HomeOrg')
+          }
         }
       });
 

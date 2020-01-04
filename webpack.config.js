@@ -19,6 +19,16 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  // devServer: {
+  //   historyApiFallback: true,
+  // },
+  // plugins: [
+  //   new HtmlWebpackPlugin({
+  //     template: './dist/index.html'
+  //   })
+
+
+
 };
 

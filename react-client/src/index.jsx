@@ -5,6 +5,9 @@ import axios from 'axios'
 import SignUp from './components/SignUp.jsx';
 import SignIn from './components/SignIn.jsx';
 import CreateEvent from './components/CreateEvent.jsx';
+import Event from './components/Event.jsx';
+import HomeUser from './components/HomeUser.jsx';
+import HomeOrg from './components/HomeOrg.jsx';
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 
 class App extends React.Component {
@@ -15,9 +18,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
 
-  }
 
   render() {
     // return (<div>
@@ -28,9 +29,10 @@ class App extends React.Component {
 
     return (
       <div>
-        <CreateEvent></CreateEvent>
         <Switch>
           <Route path="/" component={SignUp} exact />
+          <Route path="/HomeUser" component={HomeUser} exact />
+          <Route path="/HomeOrg" component={HomeOrg} />
           <Route path="/signin" component={SignIn} />
         </Switch>
       </div>

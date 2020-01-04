@@ -64,6 +64,18 @@ var getUser = function (username, callback) {
 };
 
 
+
+//**********************event */
+var getEvents = function (callback) {
+  Event.find({}, function (err, events) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, events);
+    }
+  });
+};
+
 var addEvent = function (event, callback) {
   Event.create(event, function (err, event) {
     if (err) {
@@ -73,11 +85,8 @@ var addEvent = function (event, callback) {
     }
   });
 };
-
-
-
-var getEventsByOrganizer = function (organizerId, callback) {
-  Event.find({ organizerId: organizerId }, function (err, event) {
+var getEventsByOrganizer = function (organizerI, callback) {
+  Event.find({ organizerId: organizerI }, function (err, event) {
     if (err) {
       callback(err, null);
     } else {
@@ -96,6 +105,17 @@ var getEventsByUser = function (userId, callback) {
   });
 };
 
+var addUserToEvent = function (idEvent, idUser, callback) {
+  Event.findOneAndUpdate({ _id: idEvent }, { $addToSet: { participants: idUser }, $inc: { nb: -1 } }, {
+    new: true
+  }, function (err, event) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, event);
+    }
+  });
+};
 const crypto = require('crypto');
 
 module.exports.createHash = (data, salt = '') => {
@@ -117,3 +137,5 @@ module.exports.addUser = addUser;
 module.exports.addEvent = addEvent;
 module.exports.getEventsByOrganizer = getEventsByOrganizer;
 module.exports.getEventsByUser = getEventsByUser;
+module.exports.getEvents = getEvents;
+module.exports.addUserToEvent = addUserToEvent;
