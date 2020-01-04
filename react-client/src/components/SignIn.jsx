@@ -43,13 +43,14 @@ class SignIn extends React.Component {
         },
         config)
       .then(response => {
-        // console.log('post')
-        console.log(response.data)
+        //
+
         if (response.data) {
-          console.log(response.data)
+
           localStorage.setItem('idUser', response.data._id);
           localStorage.setItem('username', response.data.username);
-          if (response.data.type !== 'Organizer') {
+          console.log(response.data.type)
+          if (response.data.type === 'Hiker') {
             this.props.history.push('/HomeUser')
           }
           else {

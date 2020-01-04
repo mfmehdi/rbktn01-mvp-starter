@@ -30,9 +30,13 @@ app.post('/user', function (req, res) {
 });
 
 app.get('/login', function (req, res) {
+  console.log(req.query.password)
   db.getUser(req.query.username, function (err, user) {
-    if (db.compareHash(req.query.password, user.password, user.salt)) {
-      res.send(user)//modify...
+    if (user) {
+      console.log(user)
+      if (db.compareHash(req.query.password, user.password, user.salt)) {
+        res.send(user)//modify...
+      }
     }
   })
 

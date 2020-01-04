@@ -43,7 +43,7 @@ var Event = mongoose.model('Event', eventSchema);
 // };
 
 var addUser = function (user, callback) {
-  console.log('before user')
+
   User.create(user, function (err, user) {
     if (err) {
       callback(err, null);
